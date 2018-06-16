@@ -1,6 +1,5 @@
 from lxml import html
 from urllib.parse import urlencode
-import nltk
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
