@@ -38,7 +38,7 @@ class Naver(object):
                 id=td[0].xpath('span//text()')[0],
                 title=td[1].xpath('span/span/a/text()')[0],
                 username=td[2].xpath('div//td/a/span/text()')[0],
-                datetime=now.replace(
+                created_at=now.replace(
                     hour=int(article_time[0]),
                     minute=int(article_time[1])).strftime("%Y-%m-%d %H:%M:%S")
             )
