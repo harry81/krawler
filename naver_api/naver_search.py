@@ -1,15 +1,23 @@
-from lxml import html
-from urllib.parse import urlencode
-from bs4 import BeautifulSoup
 from datetime import datetime
+from urllib.parse import parse_qs, urlencode, urlparse
+
 import requests
+
+from lxml import html
+
+
+def get_query_field(url, field):
+    try:
+        return parse_qs(urlparse(url).query)[field]
+    except KeyError:
+        return []
 
 
 class Naver(object):
 
     def __init__(self, clubid=10050146, userDisplay=50):
         query_dict = {
-            "search.clubid": 10050146,
+            "search.clubid": clubid,
             "search.boardtype": "L",
             "search.specialmenutype": "",
             "search.questionTab": "A",
@@ -18,29 +26,33 @@ class Naver(object):
             "userDisplay": userDisplay
         }
 
-        qs = urlencode(query_dict)
-        self.url = "http://cafe.naver.com/ArticleList.nhn?%s" % qs
+        self.qs = urlencode(query_dict)
 
-    def search(self):
+    def search(self, clubid=10050146, userDisplay=50):
+        self.qs['search.clubid'] = clubid
+        self.qs['userDisplay'] = userDisplay
+
+        self.url = "http://cafe.naver.com/ArticleList.nhn?%s" % self.qs
+
         rst = []
-        page = requests.get(self.url)
+        page = requests.get(self.url, allow_redirects=True)
         tree = html.fromstring(page.content.decode('cp949', 'ignore'))
 
         now = datetime.now()
 
-        for tr in tree.xpath('//form[@name="ArticleList"]/table/tr'):
-            td = tr.xpath('td')
-            if len(td) < 2:
-                continue
+        for article in tree.xpath("//div[(contains(@class,'article-board m-tcol-c')) and not(contains(@id, 'upperArticleList'))]/table/tbody/tr"):
+            category = article.xpath("td[contains(@class, 'td_article')]/div[contains(@class, 'board-name')]/div/a")[0].text.strip()
+            title = article.xpath("td[contains(@class, 'td_article')]/div[contains(@class, 'board-list')]/div/a")[0].text.strip()
+            id = get_query_field(article.xpath("td[contains(@class, 'td_article')]/div[contains(@class, 'board-list')]/div/a/@href")[0], 'articleid')[0]
+            username = article.xpath("td[contains(@class, 'td_name')]/div/table/tr/td/a")[0].text
+            date = article.xpath("td[contains(@class, 'td_date')]")[0].text.split(":")
 
-            article_time = td[3].xpath('text()')[0].replace('\r\n', '').strip().split(':')
             ele = dict(
-                id=td[0].xpath('span//text()')[0],
-                title=td[1].xpath('span/span/a/text()')[0],
-                username=td[2].xpath('div//td/a/span/text()')[0],
-                created_at=now.replace(
-                    hour=int(article_time[0]),
-                    minute=int(article_time[1])).strftime("%Y-%m-%d %H:%M:%S")
+                id=id,
+                title=title,
+                category=category,
+                username=username,
+                created_at=now.replace(hour=int(date[0]), minute=int(date[1])).strftime("%Y-%m-%d %H:%M:%S")
             )
             rst.append(ele)
 
