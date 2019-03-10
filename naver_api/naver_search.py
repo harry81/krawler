@@ -16,7 +16,7 @@ def get_query_field(url, field):
 class Naver(object):
 
     def __init__(self, clubid=10050146, userDisplay=50):
-        query_dict = {
+        self.query_dict = {
             "search.clubid": clubid,
             "search.boardtype": "L",
             "search.specialmenutype": "",
@@ -26,13 +26,11 @@ class Naver(object):
             "userDisplay": userDisplay
         }
 
-        self.qs = urlencode(query_dict)
-
     def search(self, clubid=10050146, userDisplay=50):
-        self.qs['search.clubid'] = clubid
-        self.qs['userDisplay'] = userDisplay
+        self.query_dict['search.clubid'] = clubid
+        self.query_dict['userDisplay'] = userDisplay
 
-        self.url = "http://cafe.naver.com/ArticleList.nhn?%s" % self.qs
+        self.url = "http://cafe.naver.com/ArticleList.nhn?%s" % urlencode(self.query_dict)
 
         rst = []
         page = requests.get(self.url, allow_redirects=True)
