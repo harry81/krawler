@@ -1,13 +1,18 @@
 from setuptools import setup
 
-setup(name='naver api',
-      version='0.1',
-      description='The naver api joke in the world',
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setup(name='water api',
+      version='0.4',
+      description='A general container of apis out of Naver, Kakao',
       url='https://github.com/harry81/naver_api',
+      long_description=long_description,
+      long_description_content_type="text/markdown",
       author='Hyunmin Choi',
       author_email='pointer81@gmail.com',
       license='MIT',
-      packages=['naver_api'],
+      packages=['water'],
       install_requires=[
           'bs4',
       ],

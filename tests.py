@@ -13,6 +13,10 @@ class TestStringMethods(unittest.TestCase):
         for row in rows:
             print(row)
 
+    def test_search(self):
+        from water import naver
+        naver.search(category='book', query='영등포')
+
 
 if __name__ == '__main__':
     unittest.main()
