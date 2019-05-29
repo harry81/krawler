@@ -1,4 +1,5 @@
 import unittest
+from water import naver
 
 
 class TestStringMethods(unittest.TestCase):
@@ -14,8 +15,10 @@ class TestStringMethods(unittest.TestCase):
             print(row)
 
     def test_search(self):
-        from water import naver
         naver.search(category='book', query='영등포')
+
+    def test_cafe(self):
+        naver.cafe(clubid='25756108')
 
 
 if __name__ == '__main__':

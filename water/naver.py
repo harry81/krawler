@@ -54,13 +54,19 @@ def cafe(clubid=10050146, userDisplay=50):
         username = article.xpath("td[contains(@class, 'td_name')]/div/table/tr/td/a")[0].text
         date = article.xpath("td[contains(@class, 'td_date')]")[0].text.split(":")
 
+        try:
+            created_at = now.replace(hour=int(date[0]), minute=int(date[1])).strftime("%Y-%m-%d %H:%M:%S")
+        except ValueError as e:
+            continue
+
         ele = dict(
             id=id,
             title=title,
             category=category,
             username=username,
-            created_at=now.replace(hour=int(date[0]), minute=int(date[1])).strftime("%Y-%m-%d %H:%M:%S")
+            created_at=created_at
         )
+
         rst.append(ele)
 
     return rst
