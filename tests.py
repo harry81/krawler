@@ -1,5 +1,5 @@
 import unittest
-from water import naver, hani
+from water import naver, hani, chosun
 
 
 class TestStringMethods(unittest.TestCase):
@@ -12,10 +12,28 @@ class TestStringMethods(unittest.TestCase):
         print(res)
 
 
+class TestChosun(unittest.TestCase):
+
+    def test_get_hrefs(self):
+        hrefs = chosun.get_hrefs()
+        self.assertIsInstance(hrefs[0], str)
+
+    def test_extract(self):
+        hrefs = chosun.get_hrefs(limit=10)
+
+        print(len(hrefs))
+
+        for href in hrefs:
+            article = chosun.extract(href)
+            print(article)
+
+        self.assertIsInstance(article['title'], str)
+
+
 class TestHani(unittest.TestCase):
 
     def test_get_hrefs(self):
-        hrefs = hani.get_hrefs()
+        hrefs = hani.get_hrefs(limit=10)
         self.assertIsInstance(hrefs[0], str)
 
     def test_extract(self):
@@ -23,7 +41,7 @@ class TestHani(unittest.TestCase):
 
         print(len(hrefs))
 
-        for href in hrefs[:40]:
+        for href in hrefs:
             article = hani.extract(href)
             print(article['title'], article['register'], article['url'])
 

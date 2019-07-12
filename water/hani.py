@@ -5,14 +5,14 @@ from lxml import html
 base_url = 'http://www.hani.co.kr/'
 
 
-def get_hrefs():
+def get_hrefs(limit=10):
     page = requests.get(base_url, allow_redirects=True)
     tree = html.fromstring(page.content)
     hrefs_ele = tree.xpath("//a[contains(@href,'html') and starts-with(@href,'/')]")
 
     hrefs = set([href.values()[0] for href in hrefs_ele])
 
-    return [*hrefs, ]
+    return [*hrefs, ][:limit]
 
 
 def extract(href=None):
