@@ -8,13 +8,14 @@
 ### 한겨레
 
 ```python
-from water import hani
+from water.krawler import Hani
 import pprint
 
-hrefs = hani.get_hrefs(limit=10)
-article = hani.extract(hrefs[0])
+hani = Hani()
+article = hani.article()
 
 pprint.pprint(article)
+
 {'content': '\r\n'
             '  북한이 지난 4월 개정한 헌법에 당 우위의 전통적 경제관리 방식인 ‘대안의 사업체계’를 삭제하고, 생산 현장의 '
             '자율성을 높이며 ‘시장 요소’를 도입한 ‘사회주의기업책임관리제’를 새로 명시한 사실이 뒤늦게 확인됐다. ‘개혁적 '
@@ -35,10 +36,11 @@ pprint.pprint(article)
 
 from water import chosun
 
-hrefs = chosun.get_hrefs(limit=10)
-article = chosun.extract(hrefs[0])
+chosun = Chosun()
+article = chosun.article()
 
 pprint.pprint(article)
+
 {'content': '코스튬 플레이와 패러디를 선보이면서 이제는 많은 사람들이 기다리는 경기 의정부고등학교의 졸업사진 촬영이 12일 '
             ...
             '단체가 학생들의 패러디 문제를 제기한 이후 학교 측에서 수위 조절에 나서 지난해에는 시사 풍자와 관련한 콘셉트가 '
