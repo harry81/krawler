@@ -1,6 +1,16 @@
 import unittest
 from water import naver
-from water.krawler import Chosun, Hani
+from water.krawler import Chosun, Hani, Frip
+
+
+class TestFrip(unittest.TestCase):
+
+    def test_base(self):
+        frip = Frip()
+        res = frip.extract(perPage=100)
+
+        for ele in [ele for ele in res['products'] if ele['rating'] > 4]:
+            print("{title} {price} {rating}".format(**ele))
 
 
 class TestStringMethods(unittest.TestCase):

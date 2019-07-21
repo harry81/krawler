@@ -6,6 +6,19 @@ hani_base_url = 'http://www.hani.co.kr/'
 chosun_base_url = 'http://www.chosun.com/'
 
 
+class Frip():
+    def extract(self, perPage=10):
+        url = "https://api.frientrip.com/Products/v5"
+        filt = dict(sectionType="nearBy",
+                    geoPoint=dict(lat="37.4923615",
+                                  lon="127.02928809999999"),
+                    category=23,
+                    perPage=perPage,
+                    currentPage=1)
+        resp = requests.get(url, json={'filter': filt})
+        return resp.json()
+
+
 class HaniParser():
     def __init__(self, href=None):
         self.href = href
