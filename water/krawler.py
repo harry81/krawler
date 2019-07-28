@@ -4,6 +4,47 @@ from lxml import html
 
 hani_base_url = 'http://www.hani.co.kr/'
 chosun_base_url = 'http://www.chosun.com/'
+br_base_url = 'http://berlinreport.com/bbs/'
+
+
+class BRParser():
+    def __init__(self, href=None):
+        self.href = href
+
+    def extract(self):
+        url = br_base_url + self.href
+        page = requests.get(url, allow_redirects=True)
+        tree = html.fromstring(page.content)
+
+        title = tree.xpath("//td[@id='mw_basic']/div[@class='mw_basic_view_subject']/h1/text()")
+        content = tree.xpath("//div[@id='view_content']/text()")
+        register = tree.xpath("//span[@class='mw_basic_view_datetime media-date']/span/text()")
+
+        ele = dict(
+            title="".join(title),
+            content="".join(content),
+            register="".join(register),
+            url=url
+        )
+
+        return ele
+
+
+class BR():  # berlinreport
+    def __init__(self, limit=10):
+        self.hrefs = self.get_hrefs(limit=limit)
+
+    def get_hrefs(self, limit=10):
+        page = requests.get("%s%s" % (br_base_url, "new.php"), allow_redirects=True)
+        tree = html.fromstring(page.content)
+        hrefs_ele = tree.xpath("//div[@class='tbl_head01 tbl_wrap']/table/tbody/tr/td[3]/a")
+
+        hrefs = set([href.values()[0] for href in hrefs_ele])
+        return [*hrefs, ][:limit]
+
+    def article(self, index=0):
+        parser = BRParser(self.hrefs[index])
+        return parser.extract()
 
 
 class Frip():

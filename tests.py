@@ -1,6 +1,18 @@
 import unittest
 from water import naver
-from water.krawler import Chosun, Hani, Frip
+from water.krawler import Chosun, Hani, Frip, BR
+
+
+class TestBR(unittest.TestCase):
+
+    def test_get_hrefs(self):
+        br = BR()
+
+    def test_parser(self):
+        br = BR(limit=15)
+        for idx, href in enumerate(br.hrefs):
+            article = br.article(idx)
+            print(article['title'])
 
 
 class TestFrip(unittest.TestCase):
