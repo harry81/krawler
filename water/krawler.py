@@ -1,10 +1,12 @@
 import requests
+import os
 
 from lxml import html
 
 hani_base_url = 'http://www.hani.co.kr/'
 chosun_base_url = 'http://www.chosun.com/'
 br_base_url = 'http://berlinreport.com/bbs/'
+kakao_search_book_base_url = 'https://dapi.kakao.com/v3/search/book?'
 
 
 class BRParser():
@@ -138,3 +140,17 @@ class Chosun():
     def article(self, index=0):
         parser = ChosunParser(self.hrefs[index])
         return parser.extract()
+
+
+class KakaoBook():
+    def __init__(self):
+        pass
+
+    def search(self, **kwargs):
+        kwargs['size'] = 50
+        kwargs['target'] = 'title'
+        kwargs['sort'] = 'accuracy'
+
+        kakao_key = os.getenv('KAKAO_KEY')
+        res = requests.get(kakao_search_book_base_url, params=kwargs, headers={"Authorization": "KakaoAK %s" % kakao_key})
+        return res.json()

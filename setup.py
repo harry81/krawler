@@ -4,7 +4,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(name='krawler-api',
-      version='0.10.0',
+      version='0.10.2',
       description='A general container of apis out of Naver, Kakao',
       url='https://github.com/harry81/krawler',
       long_description_content_type="text/markdown",

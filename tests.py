@@ -1,6 +1,6 @@
 import unittest
 from water import naver
-from water.krawler import Chosun, Hani, Frip, BR
+from water.krawler import Chosun, Hani, Frip, BR, KakaoBook
 
 
 class TestBR(unittest.TestCase):
@@ -58,6 +58,14 @@ class TestHani(unittest.TestCase):
         hani = Hani()
         article = hani.article()
         self.assertIsInstance(article['title'], str)
+
+
+class TestKakaoBook(unittest.TestCase):
+
+    def test_get_hrefs(self):
+        kakao = KakaoBook()
+        res = kakao.search(query="용기")
+        self.assertTrue(len(res['documents']) > 10)
 
 
 if __name__ == '__main__':
