@@ -1,6 +1,6 @@
 import unittest
 from water import naver
-from water.krawler import Chosun, Hani, Frip, BR, KakaoBook
+from water.krawler import Chosun, Hani, Frip, BR, KakaoBook, NaverBook
 
 
 class TestBR(unittest.TestCase):
@@ -65,7 +65,20 @@ class TestKakaoBook(unittest.TestCase):
     def test_get_hrefs(self):
         kakao = KakaoBook()
         res = kakao.search(query="용기")
-        self.assertTrue(len(res['documents']) > 10)
+        self.assertTrue(len(res.json()['documents']) > 10)
+
+
+class TestNaverBook(unittest.TestCase):
+
+    def test_search(self):
+        naver = NaverBook()
+        res = naver.search(query="노트북")
+        self.assertTrue(len(res.json()['items']) > 5)
+
+    def test_search_isbn(self):
+        naver = NaverBook()
+        res = naver.search(query="8975601994 9788975601996")
+        self.assertTrue(len(res.json()['items']) == 1)
 
 
 if __name__ == '__main__':

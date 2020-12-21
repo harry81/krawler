@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 import os
 
 from lxml import html
@@ -7,6 +8,7 @@ hani_base_url = 'http://www.hani.co.kr/'
 chosun_base_url = 'http://www.chosun.com/'
 br_base_url = 'http://berlinreport.com/bbs/'
 kakao_search_book_base_url = 'https://dapi.kakao.com/v3/search/book?'
+naver_search_book_base_url = 'https://openapi.naver.com/v1/search/book.json'
 
 
 class BRParser():
@@ -152,5 +154,25 @@ class KakaoBook():
         kwargs['sort'] = 'accuracy'
 
         kakao_key = os.getenv('KAKAO_KEY')
-        res = requests.get(kakao_search_book_base_url, params=kwargs, headers={"Authorization": "KakaoAK %s" % kakao_key})
-        return res.json()
+        res = requests.get(kakao_search_book_base_url, params=urllib.parse.urlencode(kwargs), headers={"Authorization": "KakaoAK %s" % kakao_key})
+
+        return res
+
+
+class NaverBook():
+
+    def search(self, **kwargs):
+        kwargs['display'] = 50
+        kwargs['sort'] = 'sim'
+
+        NAVER_CLIENT_ID = os.getenv('NAVER_CLIENT_ID')
+        NAVER_CLIENT_SECRET = os.getenv('NAVER_CLIENT_SECRET')
+
+        headers = {"X-Naver-Client-Id": NAVER_CLIENT_ID,
+                   "X-Naver-Client-Secret": NAVER_CLIENT_SECRET}
+
+        res = requests.get(naver_search_book_base_url,
+                           params=urllib.parse.urlencode(kwargs),
+                           headers=headers)
+        print(res.json())
+        return res

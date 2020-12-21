@@ -4,7 +4,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(name='krawler-api',
-      version='0.10.2',
+      version='0.21.5',
       description='A general container of apis out of Naver, Kakao',
       url='https://github.com/harry81/krawler',
       long_description_content_type="text/markdown",
@@ -14,6 +14,6 @@ setup(name='krawler-api',
       license='MIT',
       packages=['water'],
       install_requires=[
-          'bs4', 'requests'
+          'bs4', 'requests', 'lxml'
       ],
       zip_safe=False)
